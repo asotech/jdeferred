@@ -19,13 +19,13 @@
   <parent>
     <groupId>org.jdeferred</groupId>
     <artifactId>jdeferred-parent</artifactId>
-    <version>1.2.0-SNAPSHOT</version>
+    <version>1.2.0-asotech-SNAPSHOT</version>
     <relativePath>parent/pom.xml</relativePath>
   </parent>
   <artifactId>jdeferred</artifactId>
   <name>JDeferred Distribution</name>
   <packaging>pom</packaging>
-  <description>Build JDeferred distribution.</description>
+  <description>Build JDeferred distribution. Asotech fork</description>
 
   <modules>
     <module>parent</module>
