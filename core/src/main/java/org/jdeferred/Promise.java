@@ -337,5 +337,14 @@ public interface Promise<D, F, P> {
 	 * @throws InterruptedException
 	 */
 	public void waitSafely(long timeout) throws InterruptedException;
-	
+
+
+    /**
+     *  Methods for removing previously added callbacks
+     */
+    public boolean clear(DoneCallback<D> callback);
+    public boolean clear(ProgressCallback<P> callback);
+    public boolean clear(FailCallback<F> callback);
+    public boolean clear(AlwaysCallback<D,F> callback);
+
 }

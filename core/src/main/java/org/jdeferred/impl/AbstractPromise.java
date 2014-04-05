@@ -15,22 +15,12 @@
  */
 package org.jdeferred.impl;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-import org.jdeferred.AlwaysCallback;
-import org.jdeferred.DoneCallback;
-import org.jdeferred.DoneFilter;
-import org.jdeferred.DonePipe;
-import org.jdeferred.FailCallback;
-import org.jdeferred.FailFilter;
-import org.jdeferred.FailPipe;
-import org.jdeferred.ProgressCallback;
-import org.jdeferred.ProgressFilter;
-import org.jdeferred.ProgressPipe;
-import org.jdeferred.Promise;
+import org.jdeferred.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  *
@@ -50,6 +40,7 @@ public abstract class AbstractPromise<D, F, P> implements Promise<D, F, P> {
 	
 	protected D resolveResult;
 	protected F rejectResult;
+    protected P lastProgress;
 
 	@Override
 	public State state() {
@@ -59,29 +50,63 @@ public abstract class AbstractPromise<D, F, P> implements Promise<D, F, P> {
 	@Override
 	public Promise<D, F, P> done(DoneCallback<D> callback) {
 		synchronized (this) {
-			doneCallbacks.add(callback);
 			if (isResolved()) triggerDone(callback, resolveResult);
+            else
+                 doneCallbacks.add(callback);
 		}
 		return this;
 	}
 
+    @Override
+    public boolean clear(DoneCallback<D> callback) {
+        synchronized (this) {
+            return doneCallbacks.remove(callback);
+        }
+    }
+
+    protected void clearAll() {
+        synchronized (this) {
+            doneCallbacks.clear();
+            failCallbacks.clear();
+            alwaysCallbacks.clear();
+            progressCallbacks.clear();
+        }
+    }
+
 	@Override
 	public Promise<D, F, P> fail(FailCallback<F> callback) {
 		synchronized (this) {
-			failCallbacks.add(callback);
 			if (isRejected()) triggerFail(callback, rejectResult);
+            else
+                failCallbacks.add(callback);
 		}
 		return this;
 	}
+
+    @Override
+    public boolean clear(FailCallback<F> callback) {
+        synchronized (this) {
+            return failCallbacks.remove(callback);
+        }
+    }
 	
 	@Override
 	public Promise<D, F, P> always(AlwaysCallback<D, F> callback) {
 		synchronized (this) {
-			alwaysCallbacks.add(callback);
 			if (!isPending()) triggerAlways(callback, state, resolveResult, rejectResult);
+            else
+                alwaysCallbacks.add(callback);
 		}
 		return this;
 	}
+
+    @Override
+    public boolean clear(AlwaysCallback <D, F> callback) {
+        synchronized (this) {
+            return alwaysCallbacks.remove(callback);
+        }
+    }
+
 	
 	protected void triggerDone(D resolved) {
 		for (DoneCallback<D> callback : doneCallbacks) {
@@ -145,11 +170,23 @@ public abstract class AbstractPromise<D, F, P> implements Promise<D, F, P> {
 
 	@Override
 	public Promise<D, F, P> progress(ProgressCallback<P> callback) {
-		progressCallbacks.add(callback);
+        synchronized (this) {
+            if (lastProgress!=null) triggerProgress(callback, lastProgress);
+            if (isPending())
+                progressCallbacks.add(callback);
+        }
 		return this;
 	}
 
-	@Override
+    @Override
+    public boolean clear(ProgressCallback <P> callback) {
+        synchronized (this) {
+            return progressCallbacks.remove(callback);
+        }
+    }
+
+
+    @Override
 	public Promise<D, F, P> then(DoneCallback<D> callback) {
 		return done(callback);
 	}

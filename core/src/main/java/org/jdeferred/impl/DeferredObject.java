@@ -71,6 +71,9 @@ public class DeferredObject<D, F, P> extends AbstractPromise<D, F, P> implements
 			} finally {
 				triggerAlways(state, resolve, null);
 			}
+
+            // since object  could be resolved only once, no need to hold callbacks anymore
+            clearAll();
 		}
 		return this;
 	}
@@ -80,7 +83,9 @@ public class DeferredObject<D, F, P> extends AbstractPromise<D, F, P> implements
 		synchronized (this) {
 			if (!isPending())
 				throw new IllegalStateException("Deferred object already finished, cannot notify progress");
-			
+
+            // store last progress state, so that new progress callbacks could pick it up
+            this.lastProgress=progress;
 			triggerProgress(progress);
 		}
 		return this;
@@ -99,7 +104,10 @@ public class DeferredObject<D, F, P> extends AbstractPromise<D, F, P> implements
 			} finally {
 				triggerAlways(state, null, reject);
 			}
-		}
+
+            // since object could be rejected only once, no need to hold callbacks anymore
+            clearAll();
+        }
 		return this;
 	}
 

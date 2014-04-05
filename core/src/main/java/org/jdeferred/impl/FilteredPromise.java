@@ -37,7 +37,7 @@ public class FilteredPromise<D, F, P, D_OUT, F_OUT, P_OUT> extends DeferredObjec
 		this.doneFilter = doneFilter == null ? NO_OP_DONE_FILTER : doneFilter;
 		this.failFilter = failFilter == null ? NO_OP_FAIL_FILTER : failFilter;
 		this.progressFilter = progressFilter == null ? NO_OP_PROGRESS_FILTER : progressFilter;
-		
+
 		promise.done(new DoneCallback<D>() {
 			@Override
 			public void onDone(D result) {

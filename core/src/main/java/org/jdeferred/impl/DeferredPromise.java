@@ -95,7 +95,24 @@ public class DeferredPromise<D, F, P> implements Promise<D, F, P> {
 		return promise.always(callback);
 	}
 
-	public Promise<D, F, P> progress(ProgressCallback<P> callback) {
+    public boolean clear(AlwaysCallback<D, F> callback) {
+        return promise.clear(callback);
+    }
+
+    public boolean clear(DoneCallback<D> callback) {
+        return promise.clear(callback);
+    }
+
+    public boolean clear(FailCallback<F> callback) {
+        return promise.clear(callback);
+    }
+
+    public boolean clear(ProgressCallback<P> callback) {
+        return promise.clear(callback);
+    }
+
+
+    public Promise<D, F, P> progress(ProgressCallback<P> callback) {
 		return promise.progress(callback);
 	}
 

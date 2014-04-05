@@ -15,7 +15,8 @@
 -->
 
 
-This is a forked versionfrom Ray Tsang's project. Some changes has been made to fulfill production needs.
+This is a forked from https://github.com/jdeferred/jdeferred.
+Some changes has been made to fulfill production needs.
 
 <a name="changes"></a>Changes 1.2.0-asotech:
 --------
