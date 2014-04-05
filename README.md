@@ -14,9 +14,18 @@
   limitations under the License.
 -->
 
+
+This is a forked versionfrom Ray Tsang's project. Some changes has been made to fulfill production needs.
+
+<a name="changes"></a>Changes 1.2.0-asotech:
+--------
+* Promise.clear: unsubscribes done/fail/progress/always callbacks from promise
+* After resolution/rejection all callbacksare cleared (that helps prevents mem-leaks between threads)
+* progress callback is triggered with the last progress, when added after notification 
+
+
 JDeferred
 =========
-
 JDeferred is a Java Deferred/Promise library similar to JQuery's Deferred Object.
 
 Inspired by [JQuery](https://github.com/jquery/jquery) and [Android Deferred Object](https://github.com/CodeAndMagic/android-deferred-object).
