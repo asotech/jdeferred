@@ -14,7 +14,6 @@
   limitations under the License.
 -->
 
-
 This is a fork from https://github.com/jdeferred/jdeferred.
 Some changes has been made to fulfill production needs.
 
