@@ -15,25 +15,22 @@
  */
 package org.jdeferred.impl;
 
+import org.jdeferred.*;
+import org.jdeferred.multiple.MasterDeferredObject;
+import org.jdeferred.multiple.MasterProgress;
+import org.jdeferred.multiple.MultipleResults;
+import org.jdeferred.multiple.OneReject;
+
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-
-import org.jdeferred.DeferredCallable;
-import org.jdeferred.DeferredFutureTask;
-import org.jdeferred.DeferredManager;
-import org.jdeferred.DeferredRunnable;
-import org.jdeferred.Promise;
-import org.jdeferred.multiple.MasterProgress;
-import org.jdeferred.multiple.MasterDeferredObject;
-import org.jdeferred.multiple.MultipleResults;
-import org.jdeferred.multiple.OneReject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public abstract class AbstractDeferredManager implements DeferredManager {
-	final protected Logger log = LoggerFactory.getLogger(AbstractDeferredManager.class);
+	final protected Logger log = Logger.getLogger(AbstractDeferredManager.class.getName());
 	
 	protected abstract void submit(Runnable runnable);
 	protected abstract void submit(Callable callable);

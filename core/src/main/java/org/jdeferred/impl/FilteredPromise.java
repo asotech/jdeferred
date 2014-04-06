@@ -38,7 +38,14 @@ public class FilteredPromise<D, F, P, D_OUT, F_OUT, P_OUT> extends DeferredObjec
 		this.failFilter = failFilter == null ? NO_OP_FAIL_FILTER : failFilter;
 		this.progressFilter = progressFilter == null ? NO_OP_PROGRESS_FILTER : progressFilter;
 
-		promise.done(new DoneCallback<D>() {
+
+        // add progress first, so that if promise is already resolved notification will fire before done/fail
+		promise.progress(new ProgressCallback<P>() {
+            @Override
+            public void onProgress(P progress) {
+                FilteredPromise.this.notify(FilteredPromise.this.progressFilter.filterProgress(progress));
+            }
+        }).done(new DoneCallback<D>() {
 			@Override
 			public void onDone(D result) {
 				FilteredPromise.this.resolve(FilteredPromise.this.doneFilter.filterDone(result));
@@ -48,12 +55,6 @@ public class FilteredPromise<D, F, P, D_OUT, F_OUT, P_OUT> extends DeferredObjec
 			@Override
 			public void onFail(F result) {
 				FilteredPromise.this.reject(FilteredPromise.this.failFilter.filterFail(result));
-			}
-		}).progress(new ProgressCallback<P>() {
-
-			@Override
-			public void onProgress(P progress) {
-				FilteredPromise.this.notify(FilteredPromise.this.progressFilter.filterProgress(progress));
 			}
 		});
 	}

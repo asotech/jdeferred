@@ -16,11 +16,11 @@
 package org.jdeferred.impl;
 
 import org.jdeferred.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -29,7 +29,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *
  */
 public abstract class AbstractPromise<D, F, P> implements Promise<D, F, P> {
-	final protected Logger log = LoggerFactory.getLogger(AbstractPromise.class);
+	final protected Logger logger = Logger.getLogger(AbstractPromise.class.getName());
 	
 	protected volatile State state = State.PENDING;
 
@@ -113,7 +113,7 @@ public abstract class AbstractPromise<D, F, P> implements Promise<D, F, P> {
 			try {
 				triggerDone(callback, resolved);
 			} catch (Exception e) {
-				log.error("an uncaught exception occured in a DoneCallback", e);
+				logger.log(Level.SEVERE, "an uncaught exception occured in a DoneCallback", e);
 			}
 		}
 	}
@@ -127,7 +127,7 @@ public abstract class AbstractPromise<D, F, P> implements Promise<D, F, P> {
 			try {
 				triggerFail(callback, rejected);
 			} catch (Exception e) {
-				log.error("an uncaught exception occured in a FailCallback", e);
+                logger.log(Level.SEVERE, "an uncaught exception occured in a FailCallback", e);
 			}
 		}
 	}
@@ -141,7 +141,7 @@ public abstract class AbstractPromise<D, F, P> implements Promise<D, F, P> {
 			try {
 				triggerProgress(callback, progress);
 			} catch (Exception e) {
-				log.error("an uncaught exception occured in a ProgressCallback", e);
+                logger.log(Level.SEVERE, "an uncaught exception occured in a ProgressCallback", e);
 			}
 		}
 	}
@@ -155,7 +155,7 @@ public abstract class AbstractPromise<D, F, P> implements Promise<D, F, P> {
 			try {
 				triggerAlways(callback, state, resolve, reject);
 			} catch (Exception e) {
-				log.error("an uncaught exception occured in a AlwaysCallback", e);
+                logger.log(Level.SEVERE, "an uncaught exception occured in a AlwaysCallback", e);
 			}
 		}
 		
