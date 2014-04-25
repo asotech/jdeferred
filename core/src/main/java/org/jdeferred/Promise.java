@@ -347,4 +347,11 @@ public interface Promise<D, F, P> {
     public boolean clear(FailCallback<F> callback);
     public boolean clear(AlwaysCallback<D,F> callback);
 
+    /**
+     *  Method similar to Future.get(), safely waits for resolution of promise, or throws F or empty exception (if F is not Exception),
+     *  or fails...
+     */
+    public D get() throws Exception;
+
+
 }

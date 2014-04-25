@@ -290,4 +290,19 @@ public abstract class AbstractPromise<D, F, P> implements Promise<D, F, P> {
 			}
 		}
 	}
+
+    @Override
+    public D get() throws Exception {
+
+        this.waitSafely();
+
+        if (isRejected()) {
+            if (this.rejectResult instanceof Exception)
+                throw (Exception)this.rejectResult;
+            else
+                throw new Exception();
+        }
+        else return this.resolveResult;
+    }
+
 }

@@ -147,4 +147,9 @@ public class DeferredPromise<D, F, P> implements Promise<D, F, P> {
 			ProgressPipe<P, D_OUT, F_OUT, P_OUT> progressFilter) {
 		return promise.then(doneFilter, failFilter, progressFilter);
 	}
+
+    @Override
+    public D get() throws Exception {
+        return promise.get();
+    }
 }
